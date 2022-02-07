@@ -4,16 +4,19 @@
  */
 package com.apptravel.dao;
 
-import com.apptravel.model.ModRegister;
+import com.apptravel.model.ModAdmin;
+import java.util.List;
 
 /**
  *
  * @author galih
  */
-public interface ImplementReg {
+public interface ImplementAdmin {
     
-    public void insertreg (ModRegister mr);
-        
+    public void insert(ModAdmin ma);
+    public void update (ModAdmin ma);
+    public void delete(int no);
+    public java.util.List<ModAdmin> getAll();
     
     
 }

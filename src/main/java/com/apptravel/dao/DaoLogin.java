@@ -11,7 +11,9 @@ import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.xdevapi.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,48 +23,33 @@ import javax.swing.JOptionPane;
  * @author galih
  */
 public class DaoLogin implements ImplementLogin{
-    PreparedStatement pst = null;
-    Resultset rs = null;
-    Connection connection = Koneksi.getCon();
-    final String select = "SELECT * FROM tabelogin where username =? and password=?";
-    
-  //  final String select = "SELECT * FROM tabelogin where username =? and password=?";
+    Connection connection;
 
-    
-
-    public void select(ModLogin ml) {
-        //PreparedStatement pst;
-       connection = Koneksi.getCon();
-       //String select = "SELECT * FROM tabelogin where username =? and password=?";
-        try{
-        pst = connection.prepareStatement(select);
-        pst.setString(1, ml.getUser());
-        pst.setString(2, ml.getPass());
-        rs = (Resultset) pst.executeQuery();       
-        if(rs.next()){
-            JOptionPane.showMessageDialog(null, "login berhasil");
-        }else{
-            JOptionPane.showMessageDialog(null, "username atau password salah","",JOptionPane.ERROR_MESSAGE);
-            HomeView start = new HomeView();
-            start.setVisible(true);
-            this.dispose();
+    final String select = "SELECT * FROM tabelogin where username=? and password=?";
+                          //"SELECT * FROM tabelogin where username=? and password=?
+    public DaoLogin() throws SQLException {
+        connection = Koneksi.connection();
             
-        }
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }   catch (UnsupportedOperationException | SQLException e) {
-        JOptionPane.showMessageDialog(null, e);
-           Logger.getLogger(DaoLogin.class.getName()).log(Level.SEVERE, null, e);
-           }
-    
-}
-
-    private void dispose() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+
+        
     @Override
-    public void selectLogin(ModLogin ml) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+    public void selectLogin(ModLogin ml){
+        //PreparedStatement pst = 
+        try{    
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(select);
+            while(rs.next()){
+                ml.setUser(rs.getString("username"));
+                ml.setPass(rs.getString("password"));
+            }
+     
+           }catch (SQLException ex){
+              
+           }
+          
+        
+        }  
+             
 }

@@ -4,10 +4,12 @@
  */
 package com.apptravel.controller;
 
+import com.apptravel.dao.DaoRegister;
 import com.apptravel.dao.ImplementReg;
 import com.apptravel.model.ModRegister;
 import com.apptravel.view.RegisterView;
 import java.awt.Component;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,28 +21,26 @@ public class ControllerRegister {
     ImplementReg implreg;
     ModRegister modreg;
 
-    public ControllerRegister(RegisterView framef) {
+    public ControllerRegister(RegisterView framef) throws SQLException {
         this.framef = framef;
+        implreg = new DaoRegister();
     }
     
     public void insert(){
         if(!framef.getRgsUser().getText().trim().isEmpty() & !framef.getRgsPw().getText().trim().isEmpty() & !framef.getRgsNama().getText().trim().isEmpty() & !framef.getRgsNohp().getText().trim().isEmpty()){
-            
+        ModRegister mr = new ModRegister();    
         
-        modreg = new ModRegister();
-        modreg.setUserdaf(framef.getRgsUser().getText());
-        modreg.setPassdaf(framef.getRgsPw().getText());
-        modreg.setNama(framef.getRgsNama().getText());
-        modreg.setNohp(framef.getRgsNohp().getText());
-        implreg.insert(modreg);
-        JOptionPane.showMessageDialog((Component) implreg, "berhasil");
+        mr.setUserdaf(framef.getRgsUser().getText());
+        mr.setPassdaf(framef.getRgsPw().getText());
+        mr.setNama(framef.getRgsNama().getText());
+        mr.setNohp(framef.getRgsNohp().getText());
+        
+        implreg.insertreg(mr);
+        JOptionPane.showMessageDialog(null, "berhasil");
        }else{
             JOptionPane.showMessageDialog(null, "data gagal");
         }
     }
 
-    public ControllerRegister(ModRegister modreg) {
-        this.modreg = modreg;
-    }
     
 }

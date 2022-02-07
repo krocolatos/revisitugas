@@ -5,6 +5,9 @@
 package com.apptravel.view;
 
 import com.apptravel.controller.ControllerRegister;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -14,11 +17,12 @@ import javax.swing.JTextField;
  * @author galih
  */
 public class RegisterView extends javax.swing.JFrame {
-    private ControllerRegister ctrlr;
+    ControllerRegister ctrlr;
     /**
      * Creates new form RegisterView
+     * @throws java.sql.SQLException
      */
-    public RegisterView() {
+    public RegisterView() throws SQLException {
         initComponents();
         ctrlr = new ControllerRegister(this);
     }
@@ -195,9 +199,11 @@ public class RegisterView extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
                 new RegisterView().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(RegisterView.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }

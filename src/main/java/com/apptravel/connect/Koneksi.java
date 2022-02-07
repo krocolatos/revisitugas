@@ -15,9 +15,9 @@ import java.sql.SQLException;
 public class Koneksi {
     static Connection con;
     
-    public static Connection getCon(){
-        if(con==null){
-            try{
+    public static Connection connection() throws SQLException{
+        if(con == null){
+            //try{
              String url = new String();
              String user = new String();
              String password = new String();
@@ -25,11 +25,14 @@ public class Koneksi {
              user = "root";
              password = "";
              DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-             con = DriverManager.getConnection(url, user, password);
+             try{
+                  con = DriverManager.getConnection(url, user, password);
              
              
-        }catch(SQLException t){
-          System.out.println("error");
+             
+             
+        }catch(SQLException ex){
+          //System.out.println("error");
         }
     }
               //System.out.println("hello world");

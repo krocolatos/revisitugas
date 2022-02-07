@@ -10,7 +10,9 @@ import com.apptravel.model.ModRegister;
 import com.mysql.cj.protocol.Resultset;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Logger;
 
 /**
@@ -18,27 +20,25 @@ import java.util.logging.Logger;
  * @author galih
  */
 public class DaoRegister implements ImplementReg{
-    PreparedStatement pst = null;
-    Resultset rs = null;
-    Connection connection = Koneksi.getCon();
-    RegisterView framef;
-
-    @Override
-    public void insert(ModRegister mr) {
-        connection = Koneksi.getCon();
+  Connection connection;
+  final String insertreg = "INSERT INTO tabelogin (username, password, nama, nohp) VALUES (?,?,?,?)";
+  
+  public DaoRegister() throws SQLException {
+        connection = Koneksi.connection();
+  }
         
-        String insert = "INSERT INTO tabelogin (username, password, nama, nohp) VALUES (?,?,?,?)";
+  @Override
+  public void insertreg(ModRegister mr){
+      PreparedStatement pst = null;
         try{
-            pst = connection.prepareStatement(insert);
-            pst.setString(1, framef.getRgsUser().getText());
-            pst.setString(2, framef.getRgsPw().getText());
-            pst.setString(3, framef.getRgsNama().getText());
-            pst.setString(3, framef.getRgsNohp().getText());
+            pst = connection.prepareStatement(insertreg,Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, mr.getUserdaf());
+            pst.setString(2, mr.getPassdaf());
+            pst.setString(3, mr.getNama());
+            pst.setString(4, mr.getNohp());
             pst.executeUpdate();
-            rs = (Resultset) pst.getGeneratedKeys();
-            while(rs.next()){
-                
-            }
+            ResultSet rs = pst.getGeneratedKeys();
+           
         }catch (SQLException ex){
            ex.printStackTrace();
         }finally{
@@ -48,7 +48,6 @@ public class DaoRegister implements ImplementReg{
                 ex.printStackTrace();
             }
         }
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }
